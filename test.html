@@ -54,13 +54,16 @@ $(document).ready(function () {
       }  
 
       function startstop_record()
-      {                
+      {              
+                        var mem = [0, 0, 0, 0, 0];
+                        var tmp = 0;
                         if(rec_flag) {
                               rec_startstop.textContent = "Start New Recording";
                               rec_flag = false; 
                               connection.write("clearInterval(1)\n", function() { });
                         } else {
                               data.splice(0,data.length);
+                              tmp = 
                               connection.write("setInterval(function(){Bluetooth.println(ecg());} , 200); \n", function() { });
                               t = new Date();
                               start_time = t;
@@ -100,7 +103,7 @@ function savemyCSV() {
       var csvContent = '';
       data.forEach(function(dataArray, index) {
             var diff_time = dataArray[0].getTime()-start_time;
-            dataString = diff_time.toFixed(0) + ',' + dataArray[1].toFixed(3) + ',' + dataArray[2].toFixed(3) + ',' + dataArray[3].toFixed(3);
+            dataString = diff_time.toFixed(0) + ',' + dataArray[1].toFixed(3);
             csvContent += index < data.length ? dataString + '\n' : dataString;
       });
 
