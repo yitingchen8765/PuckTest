@@ -28,7 +28,7 @@ $(document).ready(function () {
       var date_win_min = t.getTime();
       var date_win_max = date_win_min + 2*taxis_increment;   
 
-      var g = new Dygraph(document.getElementById("div_g"), data,
+      // var g = new Dygraph(document.getElementById("div_g"), data,
                           {
                             drawPoints: true,
                             showRoller: true,
@@ -46,10 +46,10 @@ $(document).ready(function () {
                         if ( x.getTime() >= date_win_max) {
                                     date_win_min += taxis_increment;
                                      date_win_max += taxis_increment;
-                                     g.updateOptions( { dateWindow : [date_win_min, date_win_max] } );
+                                     // g.updateOptions( { dateWindow : [date_win_min, date_win_max] } );
                         };
                         data.push([x, y]);
-                        g.updateOptions( { 'file': data } );
+                        // g.updateOptions( { 'file': data } );
             };
       }  
 
@@ -62,12 +62,12 @@ $(document).ready(function () {
                         } else {
                               data.splice(0,data.length);
                               tmp = 
-                              connection.write("setInterval(function(){Bluetooth.println(ecg());} , 30); \n", function() { });
+                              connection.write("setInterval(function(){Bluetooth.println(ecg());} , 5000); \n", function() { });
                               t = new Date();
                               start_time = t;
                               var date_win_min = t.getTime();
                               var date_win_max = date_win_min + 2*taxis_increment;
-                              g.updateOptions( { dateWindow : [date_win_min, date_win_max] } );                       
+                              // g.updateOptions( { dateWindow : [date_win_min, date_win_max] } );                       
                               rec_flag = true;
                               rec_startstop.textContent= "Stop Recording";
                         };     
