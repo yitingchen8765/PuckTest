@@ -49,7 +49,7 @@ $(document).ready(function () {
                                      g.updateOptions( { dateWindow : [date_win_min, date_win_max] } );
                         };
                         data.push([x, y]);
-                        g.updateOptions( { 'file': data } );
+                        if ((data.length&15)==15) g.updateOptions( { 'file': data } ); // change 15 to other numbers
             };
       }  
 
@@ -61,7 +61,8 @@ $(document).ready(function () {
                               connection.write("clearInterval(1)\n", function() { });
                         } else {
                               data.splice(0,data.length);
-                              connection.write("setInterval(function(){Bluetooth.println(read());} , 1000); \n", function() { });
+                              connection.write("Bluetooth.accelOn(1.6); \n", function() { });
+                              connection.write("setInterval(function(){Bluetooth.println(read());} , 30); \n", function() { });
                               t = new Date();
                               start_time = t;
                               var date_win_min = t.getTime();
