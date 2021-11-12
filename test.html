@@ -58,11 +58,11 @@ $(document).ready(function () {
                         if(rec_flag) {
                               rec_startstop.textContent = "Start New Recording";
                               rec_flag = false; 
-                              connection.write("clearInterval(1)\n", function() { });
+                              connection.write("clearInterval(-1)\n", function() { });
                         } else {
                               data.splice(0,data.length);
                               connection.write("Bluetooth.accelOn(1.6); \n", function() { });
-                              connection.write("setInterval(function(){Bluetooth.println(read());} , 30); \n", function() { });
+                              connection.write("setInterval(function(){Bluetooth.println(transmit());} , 30); \n", function() { });
                               t = new Date();
                               start_time = t;
                               var date_win_min = t.getTime();
