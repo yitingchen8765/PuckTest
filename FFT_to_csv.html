@@ -22,11 +22,8 @@ $(document).ready(function () {
       var xconnect = document.getElementById("myPuck_connect");
       var savemy_CSV = document.getElementById("my_Savedata");
       var rec_startstop = document.getElementById("myrecord_start"); 
-      var taxis_increment = 10 * 1000;           /// axis increment in milliseconds
-      var t = new Date();
-      data.push([t, 1000.000]);
-      var date_win_min = t.getTime();
-      var date_win_max = date_win_min + 2*taxis_increment;   
+      var date_win_min = 0;
+      var date_win_max = 512;   
       
       var f = 0;
 
@@ -99,8 +96,7 @@ $(document).ready(function () {
 function savemyCSV() {
       var csvContent = '';
       data.forEach(function(dataArray, index) {
-            var diff_time = dataArray[0].getTime()-start_time;
-            dataString = diff_time.toFixed(0) + ',' + dataArray[1].toFixed(3);
+            dataString = f + ',' + dataArray[1].toFixed(3);
             csvContent += index < data.length ? dataString + '\n' : dataString;
       });
 
