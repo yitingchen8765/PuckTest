@@ -27,6 +27,8 @@ $(document).ready(function () {
       data.push([t, 1000.000]);
       var date_win_min = t.getTime();
       var date_win_max = date_win_min + 2*taxis_increment;   
+      
+      var f = 0;
 
       var g = new Dygraph(document.getElementById("div_g"), data,
                           {
@@ -41,7 +43,7 @@ $(document).ready(function () {
 
        function onLine(v) {
             if(rec_flag) {
-                        var x = new Date();  // current time 
+                        var x = f;  // current time 
                         var y = parseFloat(v);
                         if ( x.getTime() >= date_win_max) {
                                     date_win_min += taxis_increment;
@@ -49,7 +51,8 @@ $(document).ready(function () {
                                      g.updateOptions( { dateWindow : [date_win_min, date_win_max] } );
                         };
                         data.push([x, y]);
-                        if ((data.length&15)==15) g.updateOptions( { 'file': data } ); // change 15 to other numbers
+                        g.updateOptions( { 'file': data } );
+                        ++f;
             };
       }  
 
@@ -59,9 +62,10 @@ $(document).ready(function () {
                               rec_startstop.textContent = "Start New Recording";
                               rec_flag = false; 
                               connection.write("clearInterval(1)\n", function() { });
+                              f = 0;
                         } else {
                               data.splice(0,data.length);
-                              connection.write("setInterval(function(){Bluetooth.println(read());} , 2000); \n", function() { });
+                              connection.write("setInterval(function(){Bluetooth.println(transmit());} , 500); \n", function() { });
                               t = new Date();
                               start_time = t;
                               var date_win_min = t.getTime();
