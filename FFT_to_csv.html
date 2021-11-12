@@ -45,11 +45,7 @@ $(document).ready(function () {
             if(rec_flag) {
                         var x = f;  // current time 
                         var y = parseFloat(v);
-                        if ( x.getTime() >= date_win_max) {
-                                    date_win_min += taxis_increment;
-                                     date_win_max += taxis_increment;
-                                     g.updateOptions( { dateWindow : [date_win_min, date_win_max] } );
-                        };
+                        
                         data.push([x, y]);
                         g.updateOptions( { 'file': data } );
                         ++f;
@@ -68,8 +64,8 @@ $(document).ready(function () {
                               connection.write("setInterval(function(){Bluetooth.println(transmit());} , 500); \n", function() { });
                               t = new Date();
                               start_time = t;
-                              var date_win_min = t.getTime();
-                              var date_win_max = date_win_min + 2*taxis_increment;
+                              var date_win_min = 0;
+                              var date_win_max = 512;
                               g.updateOptions( { dateWindow : [date_win_min, date_win_max] } );                       
                               rec_flag = true;
                               rec_startstop.textContent= "Stop Recording";
