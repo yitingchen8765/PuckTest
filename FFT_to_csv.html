@@ -54,11 +54,11 @@ $(document).ready(function () {
                         if(rec_flag) {
                               rec_startstop.textContent = "Start New Recording";
                               rec_flag = false; 
-                              connection.write("clearInterval(t)\n", function() { });
+                              connection.write("clearInterval(1)\n", function() { });
                               f = 0;
                         } else {
                               data.splice(0,data.length);
-                              connection.write("t=setInterval(function(){Bluetooth.println(transmit());} , 20); \n", function() { });
+                              connection.write("setInterval(function(){Bluetooth.println(transmit());} , 20); \n", function() { });
                                             
                               rec_flag = true;
                               rec_startstop.textContent= "Stop Recording";
