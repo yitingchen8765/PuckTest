@@ -61,7 +61,8 @@ $(document).ready(function () {
                               connection.write("clearInterval(-1)\n", function() { });
                         } else {
                               data.splice(0,data.length);
-                              connection.write("setInterval(function(){Bluetooth.println(transmit());} , 50); \n", function() { });
+                              
+                              connection.write("setInterval(function(){Bluetooth.println(transmit());} , 500); \n", function() { });
                               t = new Date();
                               start_time = t;
                               var date_win_min = t.getTime();
