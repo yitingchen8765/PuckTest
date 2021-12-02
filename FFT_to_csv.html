@@ -71,9 +71,7 @@ $(document).ready(function () {
                                for (int i = 0; i < 512; ++i)
                                {
                                      connection.write("transmit();", function() { });
-                               }
-                               connection.write("clearInterval(1)\n", function() { });
-                               
+                               }                               
                                rec_flag = true;
                                rec_startstop.textContent= "Stop Recording";                               
                         };   
