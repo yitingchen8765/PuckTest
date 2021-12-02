@@ -20,7 +20,8 @@ $(document).ready(function () {
       var savemy_CSV = document.getElementById("my_Savedata");
       var rec_startstop = document.getElementById("myrecord_start"); 
       var date_win_min = 0;
-      var date_win_max = 512;   
+      var date_win_max = 512;
+      var run;
       
       var f = 0;
       var g = new Dygraph(document.getElementById("div_g"), data,
@@ -52,8 +53,9 @@ $(document).ready(function () {
                                f = 0;
                          } else {
                                data.splice(0,data.length);
-                               connection.write("var run = setInterval(function(){Bluetooth.println(transmit());} , 20); \n", function() { });
-                               connection.write("print("99999999")");
+                               connection.write("run = setInterval(function(){Bluetooth.println(transmit());} , 20); \n", function() { });
+                               
+                               if (run == -1) {connection.write("clearInterval(1)\n", function() { });}
 
                                rec_flag = true;
                                rec_startstop.textContent= "Stop Recording";
