@@ -63,7 +63,7 @@ $(document).ready(function () {
                                while (running) 
                                {
                                  connection.write("run = setInterval(function(){Bluetooth.println(transmit());} , 20); \n", function() { });
-                                 // setTimeout((), 10240);
+                                 setTimeout((), 99999);
                                  // connection.write("clearInterval(1)\n", function() { });
                                  if (rec_flag == false) 
                                  {
