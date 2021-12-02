@@ -24,7 +24,6 @@ $(document).ready(function () {
       var rec_startstop = document.getElementById("myrecord_start"); 
       var date_win_min = 0;
       var date_win_max = 512;   
-      var plot_interval = 20;
       
       var f = 0;
 
@@ -59,17 +58,10 @@ $(document).ready(function () {
                               f = 0;
                         } else {
                               data.splice(0,data.length);
-                              var running = true;
+                              connection.write("run = setInterval(function(){Bluetooth.println(transmit());} , 20); \n", function() { });
+                                            
                               rec_flag = true;
                               rec_startstop.textContent= "Stop Recording";
-
-                              while (true) 
-                              {
-                                connection.write("run = setInterval(function(){Bluetooth.println(transmit());} , 20); \n", function() { });
-                                setTimeout((), plot_interval * date_win_max);
-                                connection.write("clearInterval(1)\n", function() { });
-                              };
-                                            
                         };     
       }
 
