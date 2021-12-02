@@ -18,14 +18,11 @@ $(document).ready(function () {
       var connection;
       var xconnect = document.getElementById("myPuck_connect");
       var savemy_CSV = document.getElementById("my_Savedata");
-       var rec_startstop = document.getElementById("myrecord_start"); 
-       var date_win_min = 0;
-       var date_win_max = 512;   
-       var plot_interval = 20;
-      var run
-
-       var f = 0;
-
+      var rec_startstop = document.getElementById("myrecord_start"); 
+      var date_win_min = 0;
+      var date_win_max = 512;   
+      
+      var f = 0;
       var g = new Dygraph(document.getElementById("div_g"), data,
                           {
                             drawPoints: true,
@@ -55,17 +52,12 @@ $(document).ready(function () {
                                f = 0;
                          } else {
                                data.splice(0,data.length);
+                               connection.write("var run = setInterval(function(){Bluetooth.println(transmit());} , 20); \n", function() { });
 
-                               var running = true;
                                rec_flag = true;
                                rec_startstop.textContent= "Stop Recording";
-
-                               connection.write("run = setInterval(function(){Bluetooth.println(transmit());} , 20); \n", function() { });
-                     
-
-                         };     
-       }
-
+                        };     
+      }
       function bluetooth_connect() {
             Puck.connect(function(c) {
               //      alert("In Puck connect");
