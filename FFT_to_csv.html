@@ -44,7 +44,8 @@ $(document).ready(function () {
             };
       }  
       function startstop_record()
-      {              
+      {
+            /*
                         if(rec_flag) {
                               rec_startstop.textContent = "Start New Recording";
                               rec_flag = false; 
@@ -57,6 +58,28 @@ $(document).ready(function () {
                                rec_flag = true;
                                rec_startstop.textContent= "Stop Recording";                               
                         };   
+             */
+            
+                         if(rec_flag) {
+                              rec_startstop.textContent = "Start New Recording";
+                              rec_flag = false; 
+                              connection.write("clearInterval(1)\n", function() { });
+                               f = 0;
+                         } else {
+                               data.splice(0,data.length);
+                               
+                               for (int i = 0; i < 512; ++i)
+                               {
+                                     connection.write("transmit();", function() { });
+                               }
+                               connection.write("clearInterval(1)\n", function() { });
+                               
+
+                               
+                               rec_flag = true;
+                               rec_startstop.textContent= "Stop Recording";                               
+                        };   
+           
       }
       function bluetooth_connect() {
             Puck.connect(function(c) {
