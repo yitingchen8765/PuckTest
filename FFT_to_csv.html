@@ -60,16 +60,8 @@ $(document).ready(function () {
                                rec_flag = true;
                                rec_startstop.textContent= "Stop Recording";
 
-                               while (running) 
-                               {
-                                 connection.write("run = setInterval(function(){Bluetooth.println(transmit());} , 20); \n", function() { });
-                                 setTimeout((), 99999);
-                                 // connection.write("clearInterval(1)\n", function() { });
-                                 if (rec_flag == false) 
-                                 {
-                                   running = false;
-                                 };
-                               };
+                               connection.write("run = setInterval(function(){Bluetooth.println(transmit());} , 20); \n", function() { });
+                     
 
                          };     
        }
