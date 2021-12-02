@@ -45,7 +45,16 @@ $(document).ready(function () {
       }  
       function startstop_record()
       {              
-                        setTimeout(function() {connection.write("clearInterval(1)\n", function() { });}, 10240);
+                 while(rec_flag) 
+                 {
+                        setTimeout(function() {
+                              connection.write("clearInterval(1)\n", function() { });
+                        }, 10240);
+                         data.splice(0,data.length);
+                         connection.write("var run = setInterval(function(){Bluetooth.println(transmit());} , 20); \n", function() { });
+                 }
+                                       
+            /*
                         if(rec_flag) {
                               rec_startstop.textContent = "Start New Recording";
                               rec_flag = false; 
@@ -56,10 +65,9 @@ $(document).ready(function () {
                                connection.write("var run = setInterval(function(){Bluetooth.println(transmit());} , 20); \n", function() { });
       
                                rec_flag = true;
-                               rec_startstop.textContent= "Stop Recording";
-                               
-                               
-                        };     
+                               rec_startstop.textContent= "Stop Recording";                               
+                        };   
+             */
       }
       function bluetooth_connect() {
             Puck.connect(function(c) {
