@@ -45,7 +45,7 @@ $(document).ready(function () {
       }  
       function startstop_record()
       {
-            /*
+
                         if(rec_flag) {
                               rec_startstop.textContent = "Start New Recording";
                               rec_flag = false; 
@@ -58,8 +58,8 @@ $(document).ready(function () {
                                rec_flag = true;
                                rec_startstop.textContent= "Stop Recording";                               
                         };   
-             */
-            
+
+/*            
                          if(rec_flag) {
                               rec_startstop.textContent = "Start New Recording";
                               rec_flag = false; 
@@ -75,7 +75,7 @@ $(document).ready(function () {
                                      connection.write("transmit();", function() { });
                                }                               
                         };   
-           
+*/           
       }
       function bluetooth_connect() {
             Puck.connect(function(c) {
