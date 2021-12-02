@@ -45,7 +45,7 @@ $(document).ready(function () {
       }  
       function startstop_record()
       {              
-            
+                        setTimeout(function() {connection.write("clearInterval(1)\n", function() { });}, 10240);
                         if(rec_flag) {
                               rec_startstop.textContent = "Start New Recording";
                               rec_flag = false; 
@@ -58,7 +58,6 @@ $(document).ready(function () {
                                rec_flag = true;
                                rec_startstop.textContent= "Stop Recording";
                                
-                               setTimeout(function() {connection.write("clearInterval(1)\n", function() { });}, 10240);
                                
                         };     
       }
