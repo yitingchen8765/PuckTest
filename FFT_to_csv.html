@@ -45,14 +45,11 @@ $(document).ready(function () {
       }  
       function startstop_record()
       {              
-                 setInterval(function() 
-                 {
                         data.splice(0,data.length);
                         connection.write("var run = setInterval(function(){Bluetooth.println(transmit());} , 20); \n", function() { });
                         setTimeout(function() {
                               connection.write("clearInterval(1)\n", function() { });
                         }, 10240);
-                 }, 10240);
                                        
             /*
                         if(rec_flag) {
