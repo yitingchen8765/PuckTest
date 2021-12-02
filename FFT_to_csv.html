@@ -72,7 +72,6 @@ $(document).ready(function () {
                                {
                                      connection.write("transmit();", function() { });
                                }
-                               rec_startstop.textContent = "Start New Recording";
                                connection.write("clearInterval(1)\n", function() { });
                                
                                rec_flag = true;
