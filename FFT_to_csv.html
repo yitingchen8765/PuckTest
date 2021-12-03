@@ -30,7 +30,7 @@ $(document).ready(function () {
                             digitsAfterDecimal: 0,
                             dateWindow: [date_win_min, date_win_max],
                             // valueRange: [980, 1020],
-                            labels: ['Time', 'Pressure'],
+                            labels: ['Frequency (Hz)', 'Magnitude'],
                             showRangeSelector: true
                           });
        function onLine(v) {
@@ -38,10 +38,17 @@ $(document).ready(function () {
                         var x = f;  // current time 
                         var y = parseFloat(v);
                         
+                        if (x < 50) {
+                              y = 0;
+                        }
+                        
                         data.push([x, y]);
                         g.updateOptions( { 'file': data } );
                         ++f;
-            };
+            }
+             else {
+                   f = 0;
+             }
       }  
       function startstop_record()
       {
