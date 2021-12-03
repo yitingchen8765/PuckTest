@@ -40,8 +40,8 @@
                 var y = parseFloat(v);
 
                 if (x < Fl) { y = 0; }
-
-                data.push([x, y]);
+              
+                data.push([x - 2, y]);
                 g.updateOptions( {'file': data } );
                 ++f;
             }
