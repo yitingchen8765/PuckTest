@@ -93,8 +93,11 @@
 function savemyCSV() {
       var csvContent = '';
       data.forEach(function(dataArray, index) {
-        dataString = index + ',' + dataArray[1].toFixed(0);
-            csvContent += index < (data.length - 2) ? dataString + '\n' : dataString;
+        if (index >= 2)
+        {
+          dataString = (index - 2) + ',' + dataArray[1].toFixed(0);
+          csvContent += index < data.length ? dataString + '\n' : dataString;
+        }
       });
       // The download function takes a CSV string, the filename and mimeType as parameters
       // Scroll/look down at the bottom of this snippet to see how download is called
