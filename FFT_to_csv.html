@@ -1,32 +1,33 @@
 <html>
-<head>
-<button type="button" id="myPuck_connect" > Connect Puck via Bluetooth </button>
-<button type="button" id="myrecord_start" > Start New Recording </button>
-<button type="button" id="my_Savedata" > Save Date as  CSV - File </button>      
-<script src="https://www.puck-js.com/puck.js"></script>
-<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>      
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.css" />
-</head>
-<body>
-<div id="div_g" style="width:1200px; height:600px;"></div>
-<script type="text/javascript">
-$(document).ready(function () {
+  <head>
+    <button type="button" id="myPuck_connect" > Connect Puck via Bluetooth </button>
+    <button type="button" id="myrecord_start" > Start New Recording </button>
+    <button type="button" id="my_Savedata" > Save Date as  CSV - File </button>
+    <script src="https://www.puck-js.com/puck.js"></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.css" />
+  </head>
+  <body>
+    <div id="div_g" style="width:1000px; height:600px;"></div>
+    <script type="text/javascript">
+      $(document).ready(function () {
       var data = [];
       var rec_flag = false;
       var start_time;
       var connection;
       var xconnect = document.getElementById("myPuck_connect");
       var savemy_CSV = document.getElementById("my_Savedata");
-      var rec_startstop = document.getElementById("myrecord_start"); 
+      var rec_startstop = document.getElementById("myrecord_start");
       var date_win_min = 0;
-      var date_win_max = 512;
-      
+      var date_win_max = 256; // Nyquist freq
+      var Fl = 50; // Low cutoff freq
+
       var f = 0;
       var g = new Dygraph(document.getElementById("div_g"), data,
                           {
                             drawPoints: true,
-                            showRoller: true,
+                            showRoller: false,
                             digitsAfterDecimal: 0,
                             dateWindow: [date_win_min, date_win_max],
                             // valueRange: [980, 1020],
@@ -35,83 +36,65 @@ $(document).ready(function () {
                           });
        function onLine(v) {
             if(rec_flag) {
-                        var x = f;  // current time 
-                        var y = parseFloat(v);
-                        
-                        if (x < 50) {
-                              y = 0;
-                        }
-                        
-                        data.push([x, y]);
-                        g.updateOptions( { 'file': data } );
-                        ++f;
+                var x = f;  // current time
+                var y = parseFloat(v);
+
+                if (x < Fl) { y = 0; }
+
+                data.push([x, y]);
+                g.updateOptions( {'file': data } );
+                ++f;
             }
-             else {
-                   f = 0;
-             }
-      }  
+            else 
+            { 
+                f = 0; 
+            }
+      }
       function startstop_record()
       {
 
                         if(rec_flag) {
                               rec_startstop.textContent = "Start New Recording";
-                              rec_flag = false; 
-                              connection.write("clearInterval(1)\n", function() { });
-                               f = 0;
+                              rec_flag = false;
+                              connection.write("clearInterval(1)\n", function() {});
+                              f = 0;
                          } else {
-                               // TODO: stop recording when reached max frequency and hopefully restart automatically until click stop
-                               data.splice(0,data.length);
-                               connection.write("var run = setInterval(function(){Bluetooth.println(transmit());} , 40); \n", function() { });
-      
-                               rec_flag = true;
-                               rec_startstop.textContent= "Stop Recording";                               
-                        };   
+                              // TODO: stop recording when reached max frequency and hopefully restart automatically until click stop
+                              data.splice(0, data.length);
+                              connection.write("var run = setInterval(function(){Bluetooth.println(transmit());} , 40); \n", function() {});
 
-/*            
-                         if(rec_flag) {
-                              rec_startstop.textContent = "Start New Recording";
-                              rec_flag = false; 
-                              connection.write("clearInterval(1)\n", function() { });
-                               f = 0;
-                         } else {
-                               data.splice(0,data.length);
-                               rec_flag = true;
-                               rec_startstop.textContent= "Stop Recording";                               
-                               
-                               for (int i = 0; i < 512; ++i)
-                               {
-                                     connection.write("transmit();", function() { });
-                               }                               
-                        };   
-*/           
+                              rec_flag = true;
+                              rec_startstop.textContent= "Stop Recording";
+                        };
+
       }
       function bluetooth_connect() {
-            Puck.connect(function(c) {
-              //      alert("In Puck connect");
-                      if (!c) {
-                      alert("Couldn't connect!");
-                          return;
-                        }
-                        connection = c;               
-                  // Handle the data we get back, and call 'onLine'
-                  // whenever we get a line
-                        var buf = "";
-                        connection.on("data", function(d) {
-                         buf += d;
-                        var i = buf.indexOf("\n");
-                        while (i>=0) {
-                              onLine(buf.substr(0,i));
-                              buf = buf.substr(i+1);
-                              i = buf.indexOf("\n");
-                            }
-                        }); // connection.on ()
-                        xconnect.textContent = "Disconnect Puck via Bluetooth";
-            }); // End Puck.connect () 
-}   
+        Puck.connect(function (c) {
+          //      alert("In Puck connect");
+          if (!c) {
+            alert("Couldn't connect!");
+            return;
+          }
+          connection = c;
+          // Handle the data we get back, and call 'onLine'
+          // whenever we get a line
+          var buf = "";
+          connection.on("data", function (d) {
+            buf += d;
+            var i = buf.indexOf("\n");
+            while (i >= 0) {
+              onLine(buf.substr(0, i));
+              buf = buf.substr(i + 1);
+              i = buf.indexOf("\n");
+            }
+          }); // connection.on ()
+          xconnect.textContent = "Disconnect Puck via Bluetooth";
+        }); // End Puck.connect ()
+}
 function savemyCSV() {
       var csvContent = '';
       data.forEach(function(dataArray, index) {
-            dataString = f + ',' + dataArray[1].toFixed(3);
+        dataString = f + ',' + dataArray[1].toFixed(3);
             csvContent += index < data.length ? dataString + '\n' : dataString;
       });
       // The download function takes a CSV string, the filename and mimeType as parameters
@@ -120,23 +103,23 @@ function savemyCSV() {
                   var a = document.createElement('a');
                   mimeType = mimeType || 'application/octet-stream';
                   if (navigator.msSaveBlob) { // IE10
-                        navigator.msSaveBlob(new Blob([content], { type: mimeType }), fileName);
+        navigator.msSaveBlob(new Blob([content], { type: mimeType }), fileName);
                   } else if (URL && 'download' in a) { //html5 A[download]
-                   a.href = URL.createObjectURL(new Blob([content], { type: mimeType }));
+        a.href = URL.createObjectURL(new Blob([content], { type: mimeType }));
                   a.setAttribute('download', fileName);
                   document.body.appendChild(a);
                   a.click();
                   document.body.removeChild(a);
                   } else {
-                        location.href = 'data:application/octet-stream,' + encodeURIComponent(content); // only this mime type is supported
+        location.href = 'data:application/octet-stream,' + encodeURIComponent(content); // only this mime type is supported
                   }
             }
-            download(csvContent, 'Puck.csv', 'text/csv;encoding:utf-8');      
+            download(csvContent, 'Puck.csv', 'text/csv;encoding:utf-8');
 }     // end savemyCSV();
-      xconnect.addEventListener("click", function () { bluetooth_connect() } );
-      savemy_CSV.addEventListener("click", function () { savemyCSV() } );
-      rec_startstop.addEventListener("click", function () { startstop_record() } );
-    }); 
+      xconnect.addEventListener("click", function () {bluetooth_connect()} );
+      savemy_CSV.addEventListener("click", function () {savemyCSV()} );
+      rec_startstop.addEventListener("click", function () {startstop_record()} );
+    });
 </script>
-</body>
+  </body>
 </html>
